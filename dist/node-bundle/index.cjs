@@ -4,14 +4,7 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined")
-    return require.apply(this, arguments);
-  throw new Error('Dynamic require of "' + x + '" is not supported');
-});
-var __commonJS = (cb, mod) => function __require2() {
+var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __export = (target, all) => {
@@ -34,11 +27,12 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var __toBinaryNode = (base64) => new Uint8Array(Buffer.from(base64, "base64"));
 
 // libfftw3-wasm/libfftw3.cjs
 var require_libfftw3 = __commonJS({
-  "libfftw3-wasm/libfftw3.cjs"(exports, module) {
+  "libfftw3-wasm/libfftw3.cjs"(exports, module2) {
     var FFTWModule = (() => {
       var _scriptDir = typeof document !== "undefined" && document.currentScript ? document.currentScript.src : void 0;
       if (typeof __filename !== "undefined")
@@ -92,8 +86,8 @@ var require_libfftw3 = __commonJS({
         if (ENVIRONMENT_IS_NODE) {
           if (typeof process == "undefined" || !process.release || process.release.name !== "node")
             throw new Error("not compiled for this environment (did you build to HTML and try to run it not on the web, or set ENVIRONMENT to something - like node - and run it someplace else - like on the web?)");
-          var fs = __require("fs");
-          var nodePath = __require("path");
+          var fs = require("fs");
+          var nodePath = require("path");
           if (ENVIRONMENT_IS_WORKER) {
             scriptDirectory = nodePath.dirname(scriptDirectory) + "/";
           } else {
@@ -144,7 +138,7 @@ var require_libfftw3 = __commonJS({
             return "[Emscripten Module object]";
           };
         } else if (ENVIRONMENT_IS_SHELL) {
-          if (typeof process == "object" && typeof __require === "function" || typeof window == "object" || typeof importScripts == "function")
+          if (typeof process == "object" && typeof require === "function" || typeof window == "object" || typeof importScripts == "function")
             throw new Error("not compiled for this environment (did you build to HTML and try to run it not on the web, or set ENVIRONMENT to something - like node - and run it someplace else - like on the web?)");
           if (typeof read != "undefined") {
             read_ = function shell_read(f) {
@@ -777,7 +771,7 @@ var require_libfftw3 = __commonJS({
             "env": asmLibraryArg,
             "wasi_snapshot_preview1": asmLibraryArg
           };
-          function receiveInstance(instance, module2) {
+          function receiveInstance(instance, module3) {
             var exports3 = instance.exports;
             Module["asm"] = exports3;
             wasmMemory = Module["asm"]["memory"];
@@ -1594,8 +1588,8 @@ var require_libfftw3 = __commonJS({
         return FFTWModule2.ready;
       };
     })();
-    if (typeof exports === "object" && typeof module === "object")
-      module.exports = FFTWModule;
+    if (typeof exports === "object" && typeof module2 === "object")
+      module2.exports = FFTWModule;
     else if (typeof define === "function" && define["amd"])
       define([], function() {
         return FFTWModule;
@@ -1604,6 +1598,17 @@ var require_libfftw3 = __commonJS({
       exports["FFTWModule"] = FFTWModule;
   }
 });
+
+// src/index-bundle.ts
+var index_bundle_exports = {};
+__export(index_bundle_exports, {
+  FFTW: () => FFTW_default,
+  FFTWModuleFactoryFn: () => FFTWModuleFactoryFn,
+  FFTWModuleFactoryWasm: () => FFTWModuleFactoryWasm,
+  instantiateFFTWModule: () => instantiateFFTWModule_default,
+  instantiateFFTWModuleFromFile: () => instantiateFFTWModuleFromFile_default
+});
+module.exports = __toCommonJS(index_bundle_exports);
 
 // src/instantiateFFTWModule.ts
 var import_libfftw3 = __toESM(require_libfftw3(), 1);
@@ -1625,7 +1630,7 @@ var instantiateFFTWModule = async (ModuleFactoryIn = import_libfftw3.default, wa
     };
     g.self = { location: { href: "" } };
   }
-  const module = await ModuleFactoryIn({
+  const module2 = await ModuleFactoryIn({
     wasmBinary: wasmBinaryIn
     /*,
     getPreloadedPackage: (remotePackageName: string, remotePackageSize: number) => {
@@ -1637,7 +1642,7 @@ var instantiateFFTWModule = async (ModuleFactoryIn = import_libfftw3.default, wa
     delete g.importScripts;
     delete g.self;
   }
-  return module;
+  return module2;
 };
 var instantiateFFTWModule_default = instantiateFFTWModule;
 
@@ -1685,7 +1690,7 @@ export default ${(_b = jsCode.match(jsCodeHead)) == null ? void 0 : _b[1]};
     await fs.unlink(jsFileMod);
     wasmBinary = (await fs.readFile(wasmFile)).buffer;
   }
-  const module = await Module({
+  const module2 = await Module({
     wasmBinary
     /*,
     getPreloadedPackage: (remotePackageName: string, remotePackageSize: number) => {
@@ -1693,7 +1698,7 @@ export default ${(_b = jsCode.match(jsCodeHead)) == null ? void 0 : _b[1]};
         return new ArrayBuffer(0);
     }*/
   });
-  return module;
+  return module2;
 };
 var instantiateFFTWModuleFromFile_default = instantiateFFTWModuleFromFile;
 
@@ -1914,11 +1919,12 @@ var FFTW = class {
   }
 };
 var FFTW_default = FFTW;
-export {
-  FFTW_default as FFTW,
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  FFTW,
   FFTWModuleFactoryFn,
   FFTWModuleFactoryWasm,
-  instantiateFFTWModule_default as instantiateFFTWModule,
-  instantiateFFTWModuleFromFile_default as instantiateFFTWModuleFromFile
-};
-//# sourceMappingURL=index.mjs.map
+  instantiateFFTWModule,
+  instantiateFFTWModuleFromFile
+});
+//# sourceMappingURL=index.cjs.map
